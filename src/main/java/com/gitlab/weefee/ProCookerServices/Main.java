@@ -1,13 +1,35 @@
 package com.gitlab.weefee.ProCookerServices;
 
 import express.Express;
+import express.ExpressRouter;
 
 public class Main {
-    public static void main(String[] args) {
-        Express app = new Express();
+    public static final String version = "0.1-SNAPSHOT";
 
-        app.get("/", (req, res) -> {
-            res.send("Hello World");
-        }).listen(6969);
+    public static void main(String[] args) {
+        Weekly.initial();
+        News.initial();
+
+        Express app = new Express() {{
+            // Return server version when accessing root
+            get("/", (req, res) -> {
+                res.send(version);
+            });
+
+            use("/cloudData/", new ExpressRouter(){{
+                get("/:playerID", CloudData::getUserData);
+                post("/:playerID", CloudData::postUserData);
+            }});
+
+            use("/weekly", new ExpressRouter(){{
+                get("/", Weekly::getCurrentWeekly);
+            }});
+
+            use("/news", new ExpressRouter(){{
+                get("/", News::getCurrentNews);
+            }});
+
+            listen(6969);
+        }};
     }
 }
