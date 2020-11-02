@@ -40,6 +40,7 @@ public class CloudData {
 
         if (Main.database.writeToDatabase("players", req.getParam("playerID"), reqBody)) {
             res.sendStatus(Status._200);
+            Main.database.flushDatabase();
         } else {
             res.sendStatus(Status._500);
         }
