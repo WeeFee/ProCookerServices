@@ -6,7 +6,11 @@ import express.ExpressRouter;
 public class Main {
     public static final String version = "0.1-SNAPSHOT";
 
+    public static Database database;
+
     public static void main(String[] args) {
+        database = new Database("./db/");
+
         Weekly.initial();
         News.initial();
 

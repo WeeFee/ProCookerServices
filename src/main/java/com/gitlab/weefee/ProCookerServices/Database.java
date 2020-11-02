@@ -1,7 +1,5 @@
 package com.gitlab.weefee.ProCookerServices;
 
-import express.utils.Status;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -9,8 +7,24 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Database {
-    public static String readFromDatabase(String collection, String key) {
-        File databaseObj = new File("./db/" + collection + "/" + key);
+    private String databaseURL = "";
+
+    /**
+     *
+     * @param inputURL
+     */
+    public Database(String inputURL) {
+        databaseURL = inputURL;
+    }
+    
+    /**
+     *
+     * @param collection
+     * @param key
+     * @return
+     */
+    public String readFromDatabase(String collection, String key) {
+        File databaseObj = new File(databaseURL + collection + "/" + key);
 
         StringBuilder dataLoaded = new StringBuilder();
 
@@ -27,9 +41,16 @@ public class Database {
         return dataLoaded.toString();
     }
 
-    public static boolean writeToDatabase(String collection, String key, String content) {
+    /**
+     *
+     * @param collection
+     * @param key
+     * @param content
+     * @return
+     */
+    public boolean writeToDatabase(String collection, String key, String content) {
         try {
-            FileWriter userWriter = new FileWriter("./db/" + collection + "/" + key);
+            FileWriter userWriter = new FileWriter(databaseURL + collection + "/" + key);
             userWriter.write(content);
             userWriter.close();
             return true;
@@ -39,8 +60,14 @@ public class Database {
         return false;
     }
 
-    public static boolean keyExists(String collection, String key) {
-        File databaseObj = new File("./db/" + collection + "/" + key);
+    /**
+     *
+     * @param collection
+     * @param key
+     * @return
+     */
+    public boolean keyExists(String collection, String key) {
+        File databaseObj = new File(databaseURL + collection + "/" + key);
         return databaseObj.exists();
     }
 }

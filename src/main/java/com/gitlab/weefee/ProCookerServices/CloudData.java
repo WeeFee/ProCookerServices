@@ -6,7 +6,6 @@ import express.utils.Status;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class CloudData {
@@ -16,20 +15,8 @@ public class CloudData {
             return;
         }
 
-        File userObj = new File("./db/players/" + req.getParam("playerID"));
-        if (userObj.exists()) {
-            StringBuilder userProfile = new StringBuilder();
-            try {
-                Scanner userReader = new Scanner(userObj);
-                while (userReader.hasNextLine()) {
-                    userProfile.append(userReader.nextLine());
-                }
-                userReader.close();
-                res.send(userProfile.toString());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                res.sendStatus(Status._500);
-            }
+        if (Main.database.keyExists("players", req.getParam("playerID"))) {
+            res.send(Main.database.readFromDatabase("players", req.getParam("playerID")));
         } else {
             res.sendStatus(Status._204);
         }
@@ -51,13 +38,9 @@ public class CloudData {
             return;
         }
 
-        try {
-            FileWriter userWriter = new FileWriter("./db/pl ayers/" + req.getParam("playerID"));
-            userWriter.write(reqBody);
-            userWriter.close();
+        if (Main.database.writeToDatabase("players", req.getParam("playerID"), reqBody)) {
             res.sendStatus(Status._200);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
             res.sendStatus(Status._500);
         }
     }
