@@ -33,6 +33,11 @@ public class Main {
                 post("/:playerID", CloudData::postUserData);
             }});
 
+            use("/leaderboard/", new ExpressRouter(){{
+                get("/:leaderboardEntry", Leaderboard::getLeaderboard);
+                post("/:leaderboardEntry", Leaderboard::postLeaderboard);
+            }});
+
             use("/weekly", new ExpressRouter(){{
                 get("/", Weekly::getCurrentWeekly);
             }});
