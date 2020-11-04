@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+
 package com.gitlab.weefee.ProCookerServices;
 
 import express.http.request.Request;
@@ -9,6 +11,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 public class CloudData {
+    /**
+     *
+     * @param req
+     * @param res
+     */
     public static void getUserData(Request req, Response res) {
         if (req.getParam("playerID") == null) {
             res.sendStatus(Status._401);
@@ -22,6 +29,11 @@ public class CloudData {
         }
     }
 
+    /**
+     *
+     * @param req
+     * @param res
+     */
     public static void postUserData(Request req, Response res) {
         String reqBody = new BufferedReader(new InputStreamReader(req.getBody(), StandardCharsets.UTF_8))
                 .lines()

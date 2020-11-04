@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+
 package com.gitlab.weefee.ProCookerServices;
 
 import express.http.request.Request;
@@ -12,10 +14,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Leaderboard {
+    /**
+     *
+     * @param req
+     * @param res
+     */
     public static void getLeaderboard(Request req, Response res) {
         res.send(Main.database.readFromDatabase("leaderboards", req.getParam("leaderboardEntry")));
     }
 
+    /**
+     *
+     * @param req
+     * @param res
+     */
     public static void postLeaderboard(Request req, Response res) {
         String reqBody = new BufferedReader(new InputStreamReader(req.getBody(), StandardCharsets.UTF_8))
                 .lines()

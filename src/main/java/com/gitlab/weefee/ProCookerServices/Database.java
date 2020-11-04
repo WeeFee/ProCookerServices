@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+
 package com.gitlab.weefee.ProCookerServices;
 
 import java.io.File;
@@ -19,7 +21,14 @@ public class Database {
         this.collectDatabase();
     }
 
+    /**
+     *
+     */
     private ArrayList<ArrayList<ArrayList<String>>> databaseMemory = null;
+
+    /**
+     *
+     */
     private ArrayList<ArrayList<String>> databaseRef = null;
     
     /**
@@ -65,11 +74,24 @@ public class Database {
         return false;
     }
 
+    /**
+     *
+     * @param collection
+     * @param key
+     * @return
+     */
     public String readFromDatabase(String collection, String key) {
         int[] pos = this.findKey(collection, key);
         return databaseMemory.get(pos[0]).get(pos[1]).get(0);
     }
 
+    /**
+     *
+     * @param collection
+     * @param key
+     * @param content
+     * @return
+     */
     public boolean writeToDatabase(String collection, String key, String content) {
         try {
             int[] pos = this.findKey(collection, key);
@@ -110,6 +132,10 @@ public class Database {
         return new int[]{collectionPos, keyPos};
     }
 
+    /**
+     *
+     * @return
+     */
     private boolean collectDatabase() {
         File[] diskCollections = new File(databaseURL).listFiles(File::isDirectory);
         assert diskCollections != null;
@@ -137,15 +163,19 @@ public class Database {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     // TODO: pls clean
     public boolean flushDatabase() {
-        for (int i = 0; i < databaseRef.size(); i++) {
-            for (int x = 0; x < databaseRef.get(i).size(); x++) {
+        for (ArrayList<String> strings : databaseRef) {
+            for (int x = 0; x < strings.size(); x++) {
                 if (x == 0) {
                     continue;
                 }
-                String content = readFromDatabase(databaseRef.get(i).get(0), databaseRef.get(i).get(x));
-                if (writeToDiskDatabase(databaseRef.get(i).get(0), databaseRef.get(i).get(x), content)) {
+                String content = readFromDatabase(strings.get(0), strings.get(x));
+                if (writeToDiskDatabase(strings.get(0), strings.get(x), content)) {
                     return true;
                 }
             }
