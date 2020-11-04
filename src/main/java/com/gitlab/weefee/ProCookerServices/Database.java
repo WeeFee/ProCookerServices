@@ -167,7 +167,6 @@ public class Database {
      *
      * @return
      */
-    // TODO: pls clean
     public boolean flushDatabase() {
         for (ArrayList<String> strings : databaseRef) {
             for (int x = 0; x < strings.size(); x++) {
