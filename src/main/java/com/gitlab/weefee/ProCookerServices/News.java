@@ -5,6 +5,6 @@ import express.http.response.Response;
 
 public class News {
     public static void getCurrentNews(Request req, Response res) {
-        res.send(Main.database.readFromDatabase("info", "news"));
+        res.send(Main.database.readFromDatabase("info", "news").get(0));
     }
 }

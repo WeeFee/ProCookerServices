@@ -20,7 +20,16 @@ public class Leaderboard {
      * @param res
      */
     public static void getLeaderboard(Request req, Response res) {
-        res.send(Main.database.readFromDatabase("leaderboards", req.getParam("leaderboardEntry")));
+        if (Main.database.keyExistsDisk("leaderboards", req.getParam("leaderboardEntry"))) {
+            StringBuilder leaderboardData = new StringBuilder();
+            for (String entry: Main.database.readFromDatabase("leaderboards", req.getParam("leaderboardEntry"))) {
+                leaderboardData.append(entry);
+                leaderboardData.append(",");
+            }
+            res.send(leaderboardData.toString());
+        } else {
+            res.sendStatus(Status._204);
+        }
     }
 
     /**
@@ -43,25 +52,14 @@ public class Leaderboard {
             return;
         }
 
-        String[] currentLeaderboard = Main.database.
+        String[] currentLeaderboard = (String[]) Main.database.
                 readFromDatabase("leaderboards", req.getParam("leaderboardEntry"))
-                .split(",");
+                .toArray();
 
         List<String> currentLeaderboardList = Arrays.asList(currentLeaderboard);
 
-        StringBuilder newLeaderboard = new StringBuilder();
 
-
-
-        for (int i = 0; i < 5; i++) {
-            try {
-                newLeaderboard.append(currentLeaderboard[i] + ",");
-            } catch (ArrayIndexOutOfBoundsException e) {
-                break;
-            }
-        }
-
-        if(Main.database.writeToDatabase("leaderboards", req.getParam("leaderboardEntry"), newLeaderboard.toString())) {
+        if(Main.database.writeToDatabase("leaderboards", req.getParam("leaderboardEntry"), currentLeaderboard)) {
             res.sendStatus(Status._200);
         } else {
             res.sendStatus(Status._500);

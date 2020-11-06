@@ -12,6 +12,6 @@ public class Weekly {
      * @param res
      */
     public static void getCurrentWeekly(Request req, Response res) {
-        res.send(Main.database.readFromDatabase("info", "weekly"));
+        res.send(Main.database.readFromDatabase("info", "weekly").get(0));
     }
 }

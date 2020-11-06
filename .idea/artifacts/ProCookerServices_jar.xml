@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ProCookerServices:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ProCookerServices_jar</output-path>
+    <root id="archive" name="ProCookerServices.jar">
+      <element id="module-output" name="ProCookerServices" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/vacco/java-express/java-express/0.2.1/java-express-0.2.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -22,8 +22,13 @@ public class CloudData {
             return;
         }
 
-        if (Main.database.keyExists("players", req.getParam("playerID"))) {
-            res.send(Main.database.readFromDatabase("players", req.getParam("playerID")));
+        if (Main.database.keyExistsDisk("players", req.getParam("playerID"))) {
+            StringBuilder playerData = new StringBuilder();
+            for (String entry: Main.database.readFromDatabase("players", req.getParam("playerID"))) {
+                playerData.append(entry);
+                playerData.append(",");
+            }
+            res.send(playerData.toString());
         } else {
             res.sendStatus(Status._204);
         }
@@ -50,7 +55,7 @@ public class CloudData {
             return;
         }
 
-        if (Main.database.writeToDatabase("players", req.getParam("playerID"), reqBody)) {
+        if (Main.database.writeToDatabase("players", req.getParam("playerID"), reqBody.split(","))) {
             res.sendStatus(Status._200);
             Main.database.flushDatabase();
         } else {
