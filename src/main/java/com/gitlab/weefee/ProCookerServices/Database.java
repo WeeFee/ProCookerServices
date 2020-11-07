@@ -100,10 +100,18 @@ public class Database {
     public boolean writeToDatabase(String collection, String key, String[] content) {
         try {
             int[] pos = this.findKey(collection, key);
+
+            // Assume cloud save
+            if (pos[1] == -2) {
+                databaseMemory.get(pos[0]).add(new ArrayList<String>(content.length));
+                databaseRef.get(pos[0]).add(content[1]);
+                pos[1] = databaseMemory.get(pos[0]).size() + -1;
+            }
             // Gets the position of the specified key in tje specified collection
-            for (int i = 0; i < content.length; i++) {
+            databaseMemory.get(pos[0]).get(pos[1]).clear();
+            for (String s : content) {
                 // Sets the value of the key in the collection.
-                databaseMemory.get(pos[0]).get(pos[1]).set(i, content[i]);
+                databaseMemory.get(pos[0]).get(pos[1]).add(s);
             }
             return true;
         } catch (NullPointerException e) {
@@ -201,11 +209,15 @@ public class Database {
                 }
                 // Creates an ArrayList that will stores the value from the database.
                 ArrayList<String> contentArray = readFromDatabase(strings.get(0), strings.get(x));
+
+                StringBuilder finalContent = new StringBuilder();
+
                 for (String content: contentArray) {
-                    // Writes the value to disk.
-                    if (!writeToDiskDatabase(strings.get(0), strings.get(x), content)) {
-                        return false;
-                    }
+                    finalContent.append(content);
+                    finalContent.append(",");
+                }
+                if (!writeToDiskDatabase(strings.get(0), strings.get(x), finalContent.toString())) {
+                    return false;
                 }
             }
         }
